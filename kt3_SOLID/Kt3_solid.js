@@ -1,22 +1,22 @@
 // 1. Принцип единственной ответственности (Single Responsibility Principle)
-class Employee {
-  constructor(name, position) {
+class StaffMember {
+  constructor(name, title) {
     this.name = name;
-    this.position = position;
+    this.title = title;
   }
 
   getName() {
     return this.name;
   }
 
-  getPosition() {
-    return this.position;
+  getTitle() {
+    return this.title;
   }
 }
 
-class SalaryCalculator {
-  calculateSalary(employee, baseSalary) {
-    if (employee.getPosition() === "Manager") {
+class CompensationCalculator {
+  calculateCompensation(staffMember, baseSalary) {
+    if (staffMember.getTitle() === "Manager") {
       return baseSalary * 1.2; // Для менеджера 20% надбавка
     }
     return baseSalary;
@@ -24,36 +24,36 @@ class SalaryCalculator {
 }
 
 // 2. Принцип открытости/закрытости (Open/Closed Principle)
-class Shape {
+class GeometricShape {
   draw() {
     throw new Error("Метод draw() должен быть переопределен");
   }
 }
 
-class Circle extends Shape {
+class CircleShape extends GeometricShape {
   draw() {
     console.log("Рисуем круг");
   }
 }
 
-class Rectangle extends Shape {
+class RectangleShape extends GeometricShape {
   draw() {
     console.log("Рисуем прямоугольник");
   }
 }
 
-class ShapeDrawer {
+class ShapeRenderer {
   constructor(shape) {
     this.shape = shape;
   }
 
-  drawShape() {
+  renderShape() {
     this.shape.draw();
   }
 }
 
 // 3. Принцип подстановки Лисков (Liskov Substitution Principle)
-class RectangleBase {
+class BasicRectangle {
   setWidth(width) {
     this.width = width;
   }
@@ -67,7 +67,7 @@ class RectangleBase {
   }
 }
 
-class Square extends RectangleBase {
+class SquareShape extends BasicRectangle {
   setWidth(width) {
     this.width = width;
     this.height = width; // Для квадрата ширина = высоте
@@ -80,61 +80,61 @@ class Square extends RectangleBase {
 }
 
 // 4. Принцип разделения интерфейсов (Interface Segregation Principle)
-class Worker {
-  work() {
-    throw new Error("Метод work() должен быть переопределен");
+class JobPerformer {
+  performJob() {
+    throw new Error("Метод performJob() должен быть переопределен");
   }
 }
 
-class Eater {
-  eat() {
-    throw new Error("Метод eat() должен быть переопределен");
+class FoodConsumer {
+  consumeFood() {
+    throw new Error("Метод consumeFood() должен быть переопределен");
   }
 }
 
-class Human extends Worker {
-  work() {
+class HumanWorker extends JobPerformer {
+  performJob() {
     console.log("Человек работает");
   }
 }
 
-class Robot extends Worker {
-  work() {
+class RobotWorker extends JobPerformer {
+  performJob() {
     console.log("Робот работает");
   }
 }
 
-class HumanEater extends Eater {
-  eat() {
+class HumanFoodConsumer extends FoodConsumer {
+  consumeFood() {
     console.log("Человек ест");
   }
 }
 
 // 5. Принцип инверсии зависимостей (Dependency Inversion Principle)
-class PaymentProcessor {
-  processPayment(amount) {
-    throw new Error("Метод processPayment() должен быть переопределен");
+class PaymentHandler {
+  handlePayment(amount) {
+    throw new Error("Метод handlePayment() должен быть переопределен");
   }
 }
 
-class CreditCardProcessor extends PaymentProcessor {
-  processPayment(amount) {
+class CreditCardHandler extends PaymentHandler {
+  handlePayment(amount) {
     console.log(`Обработка оплаты ${amount} с помощью кредитной карты`);
   }
 }
 
-class PayPalProcessor extends PaymentProcessor {
-  processPayment(amount) {
+class PayPalHandler extends PaymentHandler {
+  handlePayment(amount) {
     console.log(`Обработка оплаты ${amount} через PayPal`);
   }
 }
 
-class OrderService {
-  constructor(paymentProcessor) {
-    this.paymentProcessor = paymentProcessor;
+class PurchaseService {
+  constructor(paymentHandler) {
+    this.paymentHandler = paymentHandler;
   }
 
-  processOrder(amount) {
-    this.paymentProcessor.processPayment(amount);
+  processPurchase(amount) {
+    this.paymentHandler.handlePayment(amount);
   }
 }
